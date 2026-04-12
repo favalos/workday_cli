@@ -6,7 +6,13 @@ mod config;
 pub mod security;
 
 #[derive(Parser)]
-#[command(name = "workday_cli", version, about = "Workday CLI tool")]
+#[command(
+    name = "workday_cli",
+    version,
+    about = "Workday CLI tool",
+    after_help = "Need help? Open an issue: https://github.com/favalos/workday_cli/issues\n\
+                  Or reach out on LinkedIn: https://www.linkedin.com/in/favalosg/"
+)]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

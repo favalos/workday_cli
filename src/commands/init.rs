@@ -33,19 +33,23 @@ pub struct InitArgs {
 fn extract_host(url: &str) -> Result<(&str, &str), String> {
     let without_scheme = url
         .strip_prefix("https://")
-        .or_else(|| url.strip_prefix("http://"))
         .ok_or("Invalid URL: missing http(s):// scheme")?;
 
-    let mut parts = without_scheme.splitn(3, '/');
-    let host = parts.next().unwrap_or(without_scheme);
-    let host = host.split(':').next().unwrap_or(host);
-    let tenant = parts.next().unwrap_or("");
+    let (host, path) = without_scheme
+        .split_once('/')
+        .ok_or("Invalid URL: no path after host")?;
+
+    let tenant = path
+        .split('/')
+        .rev()
+        .nth(1)
+        .ok_or("Invalid URL: cannot extract tenant from path")?;
 
     Ok((host, tenant))
 }
 
 fn build_and_save_config(args: &InitArgs) -> Result<(), String> {
-    let host = extract_host(&args.auth_url)?;
+    let host = extract_host(&args.token_url)?;
 
     let cfg = Config {
         host: host.0.to_string(),
