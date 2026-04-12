@@ -1,5 +1,4 @@
 use std::fs;
-use std::process::Command;
 
 use clap::Args;
 use tiny_http::{Response, Server, SslConfig};
@@ -92,61 +91,11 @@ fn setup_tls() -> Result<SslConfig, String> {
         });
     }
 
-    // Check if mkcert is installed
-    if Command::new("mkcert").arg("-version").output().is_err() {
-        return Err(
-            "mkcert is not installed. Install it with: brew install mkcert\n\
+    return Err(
+        "mkcert is not installed. Install it with: brew install mkcert\n\
              Then run: mkcert -install"
-                .to_string(),
-        );
-    }
-
-    // Install the local CA (no-op if already done)
-    println!("Setting up local CA with mkcert...");
-    let install = Command::new("mkcert")
-        .arg("-install")
-        .output()
-        .map_err(|e| format!("Failed to run mkcert -install: {e}"))?;
-
-    if !install.status.success() {
-        return Err(format!(
-            "mkcert -install failed: {}",
-            String::from_utf8_lossy(&install.stderr)
-        ));
-    }
-
-    // Generate cert for localhost
-    fs::create_dir_all(&dir).map_err(|e| format!("Failed to create config directory: {e}"))?;
-
-    println!("Generating trusted certificate for localhost...");
-    let cert_gen = Command::new("mkcert")
-        .args([
-            "-cert-file",
-            cert_path.to_str().unwrap(),
-            "-key-file",
-            key_path.to_str().unwrap(),
-            "localhost",
-            "127.0.0.1",
-        ])
-        .output()
-        .map_err(|e| format!("Failed to run mkcert: {e}"))?;
-
-    if !cert_gen.status.success() {
-        return Err(format!(
-            "mkcert failed: {}",
-            String::from_utf8_lossy(&cert_gen.stderr)
-        ));
-    }
-
-    let cert =
-        fs::read(&cert_path).map_err(|e| format!("Failed to read generated certificate: {e}"))?;
-    let key =
-        fs::read(&key_path).map_err(|e| format!("Failed to read generated private key: {e}"))?;
-
-    Ok(SslConfig {
-        certificate: cert,
-        private_key: key,
-    })
+            .to_string(),
+    );
 }
 
 pub fn execute(args: &InitArgs) {
