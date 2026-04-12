@@ -78,4 +78,4 @@ This opens your browser for OAuth authentication. After you log in, the CLI rece
 
 ## Help
 
-For issues, questions, or feature requests, reach out at [github.com/favalos/workday_cli/issues](https://github.com/favalos/workday_cli/issues) or [Linkein](https://www.linkedin.com/in/favalosg/).
+For issues, questions, or feature requests, reach out at [github.com/favalos/workday_cli/issues](https://github.com/favalos/workday_cli/issues) or [LinkedIn](https://www.linkedin.com/in/favalosg/).
