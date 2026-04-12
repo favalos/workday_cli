@@ -22,7 +22,7 @@ jobs:
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: target/release/tu_binario # Cambia 'tu_binario' por el nombre de tu ejecutable
+          files: target/release/workday_cli
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
