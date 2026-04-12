@@ -4,6 +4,11 @@ on:
     tags:
       - 'v*' # Triggers on tags like v1.0.0
 
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
