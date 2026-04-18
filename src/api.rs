@@ -14,10 +14,10 @@ impl ApiClient {
         })
     }
 
-    pub fn get(&self, path: &str) -> Result<String, String> {
+    pub fn get(&self, api: &str, version: &str, path: &str) -> Result<String, String> {
         let url = format!(
-            "https://{}/api/common/v1/{}/{}",
-            self.config.host, self.config.tenant, path
+            "https://{}/api/{}/{}/{}/{}",
+            self.config.host, api, version, self.config.tenant, path
         );
 
         let response = ureq::get(&url)
