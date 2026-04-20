@@ -24,6 +24,8 @@ enum Commands {
     Init(commands::init::InitArgs),
     /// Get a worker by WID or use "me" for the current user
     Worker(commands::worker::WorkerArgs),
+    /// Revenue commands: customers, invoices, and invoice PDFs
+    Revenue(commands::revenue::RevenueArgs),
 }
 
 fn main() {
@@ -32,5 +34,6 @@ fn main() {
     match &cli.command {
         Commands::Init(args) => commands::init::execute(args),
         Commands::Worker(args) => commands::worker::execute(args),
+        Commands::Revenue(args) => commands::revenue::execute(args),
     }
 }

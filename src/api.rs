@@ -1,3 +1,4 @@
+use std::io::Read;
 use crate::config::{Config, load_config};
 use crate::security::{KeyStore, get_credentials};
 
@@ -35,5 +36,31 @@ impl ApiClient {
         response
             .into_string()
             .map_err(|e| format!("Failed to read response: {e}"))
+    }
+
+    pub fn get_bytes(&self, api: &str, version: &str, path: &str) -> Result<Vec<u8>, String> {
+        let url = format!(
+            "https://{}/api/{}/{}/{}/{}",
+            self.config.host, api, version, self.config.tenant, path
+        );
+
+        let response = ureq::get(&url)
+            .set(
+                "Authorization",
+                &format!(
+                    "{} {}",
+                    self.credentials.token_response.token_type,
+                    self.credentials.token_response.access_token
+                ),
+            )
+            .call()
+            .map_err(|e| format!("Request failed: {e}"))?;
+
+        let mut bytes = Vec::new();
+        response
+            .into_reader()
+            .read_to_end(&mut bytes)
+            .map_err(|e| format!("Failed to read response: {e}"))?;
+        Ok(bytes)
     }
 }

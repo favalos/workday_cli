@@ -33,6 +33,57 @@ workday_cli worker time-off me
 workday_cli worker search-worker <NAME>
 ```
 
+#### `payslips` — Get worker payslips
+
+```bash
+workday_cli worker payslips <WID> [LIMIT]
+workday_cli worker payslips me        # defaults to 1 payslip
+workday_cli worker payslips me 5
+```
+
+#### `history` — Get worker history events
+
+```bash
+workday_cli worker history <WID> [LIMIT]
+workday_cli worker history me         # defaults to 5 events
+workday_cli worker history me 20
+```
+
+---
+
+### `revenue` — Query revenue data
+
+#### `customer` — Search for a customer by name
+
+```bash
+workday_cli revenue customer <NAME>
+```
+
+#### `invoices` — Get invoices for a customer
+
+```bash
+workday_cli revenue invoices <CUSTOMER_ID> [LIMIT]
+workday_cli revenue invoices abc123       # defaults to 1 invoice
+workday_cli revenue invoices abc123 25
+```
+
+#### `invoice-print` — Get print runs for an invoice
+
+```bash
+workday_cli revenue invoice-print <INVOICE_ID> [LIMIT]
+workday_cli revenue invoice-print inv123       # defaults to 1
+workday_cli revenue invoice-print inv123 5
+```
+
+#### `invoice-pdf` — Download an invoice PDF by ID
+
+```bash
+workday_cli revenue invoice-pdf <PDF_ID>
+workday_cli revenue invoice-pdf <PDF_ID> --output ~/Downloads/invoice.pdf
+```
+
+Saves to `invoice_<ID>.pdf` in the current directory by default.
+
 ---
 
 ## Troubleshooting
