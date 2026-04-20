@@ -2,7 +2,7 @@
 set -e
 
 REPO="favalos/workday_cli"
-VERSION="v0.0.5"
+VERSION="v0.0.6"
 BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/workday_cli"
 SKILL_URL="https://raw.githubusercontent.com/${REPO}/main/SKILL.md"
 
