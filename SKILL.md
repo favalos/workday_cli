@@ -86,7 +86,91 @@ Saves to `invoice_<ID>.pdf` in the current directory by default.
 
 ---
 
-## Troubleshooting
+### `integrations` — Query integration event data
+
+All integration subcommands query integration events using WQL (Workday Query Language).
+
+#### Status Mapping
+
+When using the `--status` filter, use the status ID from this mapping:
+
+| Status Name | Status ID |
+|---|---|
+| Completed | `d8b0bcd8446c11de98360015c5e6daf6` |
+| Completed With Errors | `d8b0c264446c11de98360015c5e6daf6` |
+| Completed with Warnings | `d8b0c34a446c11de98360015c5e6daf6` |
+| Failed | `d8b0bdbe446c11de98360015c5e6daf6` |
+
+#### `events` — Get all integration events from the last X days
+
+```bash
+workday_cli integrations events 0      # Today's events
+workday_cli integrations events 7      # Last 7 days
+workday_cli integrations events 30     # Last 30 days
+```
+
+#### `events-by-status` — Get summarized events by status for the last X days
+
+Returns count of events grouped by `integrationSystem` and `status`.
+
+```bash
+workday_cli integrations events-by-status 0
+workday_cli integrations events-by-status 7
+```
+
+#### `events-by-month` — Get summarized events for a specific month
+
+- **For month 0 (current)**: Returns events from start of current month to current moment
+- **For other months**: Returns events for the entire month (1 = last month, 2 = two months ago, etc.)
+
+Grouped by `integrationSystem` and `status`.
+
+```bash
+# Current month
+workday_cli integrations events-by-month 0
+
+# Last month
+workday_cli integrations events-by-month 1
+
+# Fetch last 6 months (makes 6 separate requests)
+workday_cli integrations events-by-month 0 --range 6
+```
+
+**With optional status filter:**
+
+```bash
+# Filter by status
+workday_cli integrations events-by-month 1 --status "'d8b0bcd8446c11de98360015c5e6daf6'"
+
+# Multiple statuses
+workday_cli integrations events-by-month 1 --status "'d8b0bcd8446c11de98360015c5e6daf6','d8b0c264446c11de98360015c5e6daf6'"
+```
+
+**Response format:**
+
+Each monthly result includes `month`, `year`, and `data` fields:
+
+```json
+{
+  "month": 4,
+  "year": 2026,
+  "data": [
+    {
+      "integrationSystem": {
+        "descriptor": "AR2 Migrator System",
+        "id": "55e80cd04c5e1000113f191f48530000"
+      },
+      "status": {
+        "descriptor": "Completed",
+        "id": "d8b0bcd8446c11de98360015c5e6daf6"
+      },
+      "count()": "1"
+    }
+  ]
+}
+```
+
+---
 
 ### "Config not found. Run 'init' first."
 

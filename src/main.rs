@@ -26,6 +26,8 @@ enum Commands {
     Worker(commands::worker::WorkerArgs),
     /// Revenue commands: customers, invoices, and invoice PDFs
     Revenue(commands::revenue::RevenueArgs),
+    /// Integration commands: list, details, status, and logs
+    Integrations(commands::integrations::IntegrationsArgs),
 }
 
 fn main() {
@@ -35,5 +37,6 @@ fn main() {
         Commands::Init(args) => commands::init::execute(args),
         Commands::Worker(args) => commands::worker::execute(args),
         Commands::Revenue(args) => commands::revenue::execute(args),
+        Commands::Integrations(args) => commands::integrations::execute(args),
     }
 }
