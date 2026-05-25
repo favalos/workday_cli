@@ -4,6 +4,7 @@ pub mod api;
 mod commands;
 mod config;
 pub mod security;
+pub mod soap;
 
 #[derive(Parser)]
 #[command(
@@ -28,6 +29,10 @@ enum Commands {
     Revenue(commands::revenue::RevenueArgs),
     /// Integration commands: list, details, status, and logs
     Integrations(commands::integrations::IntegrationsArgs),
+    /// Resource commands: job profiles and supervisory organizations
+    Resources(commands::resources::ResourcesArgs),
+    /// Staffing commands: create and manage positions
+    Staffing(commands::staffing::StaffingArgs),
 }
 
 fn main() {
@@ -38,5 +43,7 @@ fn main() {
         Commands::Worker(args) => commands::worker::execute(args),
         Commands::Revenue(args) => commands::revenue::execute(args),
         Commands::Integrations(args) => commands::integrations::execute(args),
+        Commands::Resources(args) => commands::resources::execute(args),
+        Commands::Staffing(args) => commands::staffing::execute(args),
     }
 }

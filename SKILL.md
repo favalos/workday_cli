@@ -172,6 +172,85 @@ Each monthly result includes `month`, `year`, and `data` fields:
 
 ---
 
+### `resources` — Query staffing reference data
+
+#### `job-profiles` — Search job profiles by name
+
+```bash
+workday_cli resources job-profiles "Integration Engineer"
+workday_cli resources job-profiles "Software Engineer"
+```
+
+#### `time-types` — Search position time types by name
+
+```bash
+workday_cli resources time-types "Full Time"
+workday_cli resources time-types "Part Time"
+```
+
+#### `locations` — Search locations by name
+
+```bash
+workday_cli resources locations "San Fran"
+workday_cli resources locations "New York"
+```
+
+#### `supervisory-org` — Search supervisory organizations by name
+
+```bash
+workday_cli resources supervisory-org "Information Technology"
+workday_cli resources supervisory-org "Engineering"
+```
+
+#### `employee-types` — Search employee types by name
+
+```bash
+workday_cli resources employee-types "Regular"
+workday_cli resources employee-types "Temporary"
+```
+
+---
+
+### `staffing` — Create and manage positions and employees
+
+#### `create-position` — Create a new position under a supervisory organization
+
+```bash
+workday_cli staffing create-position <SUPERVISORY_ORG_WID> "<POSITION_NAME>"
+```
+
+Returns the new position WID and Position ID (e.g. `P-01509`) needed for `hire-employee`.
+
+#### `hire-employee` — Hire a new employee into an existing position
+
+```bash
+workday_cli staffing hire-employee \
+  <SUPERVISORY_ORG_WID> \
+  <POSITION_WID> \
+  <FIRST_NAME> \
+  <LAST_NAME> \
+  <EMAIL> \
+  <EMPLOYEE_TYPE_WID> \
+  <LOCATION_WID> \
+  <TIME_TYPE_WID> \
+  <JOB_PROFILE_WID>
+```
+
+Returns the event WID and Applicant ID (e.g. `A02407`) on success.
+
+Use `resources` subcommands to look up all WIDs before hiring:
+
+| Argument | Command |
+|---|---|
+| `SUPERVISORY_ORG_WID` | `workday_cli resources supervisory-org "<NAME>"` |
+| `POSITION_WID` | output of `staffing create-position` |
+| `EMPLOYEE_TYPE_WID` | `workday_cli resources employee-types "<NAME>"` |
+| `LOCATION_WID` | `workday_cli resources locations "<NAME>"` |
+| `TIME_TYPE_WID` | `workday_cli resources time-types "<NAME>"` |
+| `JOB_PROFILE_WID` | `workday_cli resources job-profiles "<NAME>"` |
+
+---
+
 ### "Config not found. Run 'init' first."
 
 You haven't initialized the CLI yet. Run the `init` command with your Workday credentials:
