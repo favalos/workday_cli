@@ -90,7 +90,7 @@ impl CredentialBackend for SystemCredentialBackend {
             }
         }
 
-        if read_failures.is_empty() && saw_missing {
+        if init_failures.is_empty() && read_failures.is_empty() && saw_missing {
             return Err(CredentialBackendError::Missing);
         }
 
@@ -151,10 +151,7 @@ fn add_platform_stores(stores: &mut Vec<SystemStore>, failures: &mut Vec<String>
     );
 }
 
-#[cfg(all(
-    unix,
-    not(any(target_os = "macos", target_os = "ios", target_os = "android"))
-))]
+#[cfg(target_os = "linux")]
 fn add_platform_stores(stores: &mut Vec<SystemStore>, failures: &mut Vec<String>) {
     push_store(
         stores,
@@ -170,11 +167,7 @@ fn add_platform_stores(stores: &mut Vec<SystemStore>, failures: &mut Vec<String>
     );
 }
 
-#[cfg(not(any(
-    target_os = "macos",
-    target_os = "windows",
-    all(unix, not(any(target_os = "ios", target_os = "android")))
-)))]
+#[cfg(not(any(target_os = "macos", target_os = "windows", target_os = "linux")))]
 fn add_platform_stores(_stores: &mut Vec<SystemStore>, failures: &mut Vec<String>) {
     failures.push("no credential backend is configured for this platform".to_string());
 }

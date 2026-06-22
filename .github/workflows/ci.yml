@@ -34,7 +34,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: |
-          cargo tree --target x86_64-unknown-linux-gnu -i security-framework > /tmp/security-framework-tree.txt 2>&1
+          cargo tree --target x86_64-unknown-linux-gnu -i security-framework > /tmp/security-framework-tree.txt 2>&1 || true
           cat /tmp/security-framework-tree.txt
           if grep -q "security-framework v" /tmp/security-framework-tree.txt; then
             echo "security-framework must not be part of the Linux dependency graph"

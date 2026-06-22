@@ -21,6 +21,6 @@ apple-native-keyring-store = { version = "1", features = ["keychain"] }
 [target.'cfg(target_os = "windows")'.dependencies]
 windows-native-keyring-store = "1"
 
-[target.'cfg(all(unix, not(any(target_os = "macos", target_os = "ios", target_os = "android"))))'.dependencies]
+[target.'cfg(target_os = "linux")'.dependencies]
 linux-keyutils-keyring-store = "1"
 zbus-secret-service-keyring-store = { version = "1", features = ["rt-async-io-crypto-rust"] }

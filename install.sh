@@ -36,14 +36,17 @@ echo "==> Installing workday_cli ${VERSION}"
 echo "==> Downloading workday_cli binary for ${TARGET}..."
 mkdir -p "$BIN_DIR"
 if ! curl -fSL "$BINARY_URL" -o "$BIN_DIR/workday_cli"; then
-    if [ "$TARGET" = "aarch64-apple-darwin" ]; then
+    case "$TARGET" in
+    *-apple-darwin)
         echo "    Target-specific asset not found; trying legacy macOS asset..."
         curl -fSL "$LEGACY_BINARY_URL" -o "$BIN_DIR/workday_cli"
-    else
+        ;;
+    *)
         echo "    ERROR: no prebuilt binary found for ${TARGET} in ${VERSION}."
         echo "    Check the release assets or build from source with: cargo build --release"
         exit 1
-    fi
+        ;;
+    esac
 fi
 chmod +x "$BIN_DIR/workday_cli"
 echo "    Installed to $BIN_DIR/workday_cli"
