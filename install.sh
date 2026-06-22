@@ -3,8 +3,28 @@ set -e
 
 REPO="favalos/workday_cli"
 VERSION="v0.0.8"
-BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/workday_cli"
 SKILL_URL="https://raw.githubusercontent.com/${REPO}/main/SKILL.md"
+
+case "$(uname -m)" in
+    x86_64|amd64) ARCH="x86_64" ;;
+    arm64|aarch64) ARCH="aarch64" ;;
+    *)
+        echo "    ERROR: unsupported architecture: $(uname -m)"
+        exit 1
+        ;;
+esac
+
+case "$(uname -s)" in
+    Linux) TARGET="${ARCH}-unknown-linux-gnu" ;;
+    Darwin) TARGET="${ARCH}-apple-darwin" ;;
+    *)
+        echo "    ERROR: unsupported OS: $(uname -s)"
+        exit 1
+        ;;
+esac
+
+BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/workday_cli-${TARGET}"
+LEGACY_BINARY_URL="https://github.com/${REPO}/releases/download/${VERSION}/workday_cli"
 
 BIN_DIR="$HOME/.local/bin"
 CERT_DIR="$HOME/.w-cli"
@@ -13,9 +33,18 @@ SKILL_DIR="$HOME/.claude/skills/workday-cli"
 echo "==> Installing workday_cli ${VERSION}"
 
 # 1. Download the binary
-echo "==> Downloading workday_cli binary..."
+echo "==> Downloading workday_cli binary for ${TARGET}..."
 mkdir -p "$BIN_DIR"
-curl -fSL "$BINARY_URL" -o "$BIN_DIR/workday_cli"
+if ! curl -fSL "$BINARY_URL" -o "$BIN_DIR/workday_cli"; then
+    if [ "$TARGET" = "aarch64-apple-darwin" ]; then
+        echo "    Target-specific asset not found; trying legacy macOS asset..."
+        curl -fSL "$LEGACY_BINARY_URL" -o "$BIN_DIR/workday_cli"
+    else
+        echo "    ERROR: no prebuilt binary found for ${TARGET} in ${VERSION}."
+        echo "    Check the release assets or build from source with: cargo build --release"
+        exit 1
+    fi
+fi
 chmod +x "$BIN_DIR/workday_cli"
 echo "    Installed to $BIN_DIR/workday_cli"
 

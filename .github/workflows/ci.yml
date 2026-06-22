@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo fmt --check
+
+      - name: Test
+        run: cargo test
+
+      - name: Verify Linux does not depend on security-framework
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          cargo tree --target x86_64-unknown-linux-gnu -i security-framework > /tmp/security-framework-tree.txt 2>&1
+          cat /tmp/security-framework-tree.txt
+          if grep -q "security-framework v" /tmp/security-framework-tree.txt; then
+            echo "security-framework must not be part of the Linux dependency graph"
+            exit 1
+          fi

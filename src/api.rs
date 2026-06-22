@@ -1,6 +1,6 @@
-use std::io::Read;
 use crate::config::{Config, load_config};
 use crate::security::{KeyStore, get_credentials};
+use std::io::Read;
 
 pub struct ApiClient {
     config: Config,

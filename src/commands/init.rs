@@ -166,7 +166,7 @@ pub fn execute(args: &InitArgs) {
                     Ok(token) => {
                         println!("Token type:    {}", token.token_type);
                         match security::store_credentials(args, token) {
-                            Ok(()) => println!("Tokens stored in keychain."),
+                            Ok(()) => println!("Tokens stored in credential store."),
                             Err(e) => eprintln!("{e}"),
                         }
                     }

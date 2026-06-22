@@ -263,14 +263,19 @@ Config is stored at `~/.w-cli/config.json`.
 
 ### "Credentials not found. Run 'init' first."
 
-The macOS Keychain has no stored tokens. Re-run `workday_cli init` to authenticate and store credentials.
+The native credential store has no stored tokens. Re-run `workday_cli init` to authenticate and store credentials.
 
 ### "mkcert is not installed"
 
 The HTTPS callback server requires locally-trusted certificates. Install mkcert and set up the local CA:
 
 ```bash
+# macOS
 brew install mkcert
+mkcert -install
+
+# Linux, package names vary by distribution
+# Install mkcert from your package manager or https://github.com/FiloSottile/mkcert
 mkcert -install
 ```
 
@@ -315,6 +320,6 @@ rm ~/.w-cli/localhost.pem ~/.w-cli/localhost-key.pem
 workday_cli init ...
 ```
 
-### Keychain access prompts
+### Credential store access prompts
 
-macOS may prompt you to allow `workday_cli` access to the Keychain. Click "Always Allow" to avoid repeated prompts.
+Your OS may prompt you to allow `workday_cli` access to the native credential store. On macOS, click "Always Allow" for Keychain prompts to avoid repeated access prompts. On desktop Linux, ensure Secret Service is running and unlocked; on headless Linux or WSL, the CLI falls back to Linux keyutils when available.
