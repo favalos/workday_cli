@@ -2,7 +2,7 @@
 set -e
 
 REPO="favalos/workday_cli"
-VERSION="v0.0.8"
+VERSION="v0.0.9"
 SKILL_URL="https://raw.githubusercontent.com/${REPO}/main/SKILL.md"
 
 case "$(uname -m)" in
