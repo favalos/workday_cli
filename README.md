@@ -10,7 +10,7 @@ The CLI advantages for this use case:
 
 - **No runtime dependencies** — one binary, no Node.js, no Python, no Docker.
 - **Stateless execution** — each invocation is isolated. No connection pools to manage, no process to monitor.
-- **Native OS integration** — credentials live in macOS Keychain, not in environment variables or config files passed through a server.
+- **Native OS integration** — credentials live in the native OS credential store, not in environment variables or config files passed through a server.
 - **Simple distribution** — `curl | sh` and you're done.
 
 MCP is the right tool when you need persistent connections, streaming, or complex multi-step orchestration. For hitting a REST API with proper auth, a CLI is simpler and more secure.
@@ -30,7 +30,7 @@ No build tools, no manual setup.
 ### Security First
 
 - **Credentials never leave your computer.** There is no server, no proxy, no third-party service in the middle. The CLI talks directly to the Workday API from your machine.
-- **Tokens are stored in macOS Keychain.** Not in plaintext files, not in environment variables. The OS manages encryption and access control.
+- **Tokens are stored in the native OS credential store: macOS Keychain, Windows Credential Manager, Linux Secret Service, or Linux keyutils fallback.** Not in plaintext files, not in environment variables. The OS manages access control and backend-specific protection.
 - **OAuth runs over local HTTPS.** The callback server uses locally-trusted TLS certificates via `mkcert`, so the auth flow never touches plain HTTP.
 - **Automatic token refresh.** When tokens are about to expire, the CLI refreshes them transparently. No manual re-authentication unless the refresh token itself has expired.
 
@@ -74,7 +74,7 @@ workday_cli init \
   --environment <sandbox|production>
 ```
 
-This opens your browser for OAuth authentication. After you log in, the CLI receives the callback, exchanges the code for tokens, and stores everything securely in Keychain.
+This opens your browser for OAuth authentication. After you log in, the CLI receives the callback, exchanges the code for tokens, and stores everything in the native OS credential store.
 
 ## Help
 

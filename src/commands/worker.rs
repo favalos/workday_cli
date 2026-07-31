@@ -75,9 +75,11 @@ pub fn execute(args: &WorkerArgs) {
             &"v1",
             &format!("workers/{wid}/paySlips?limit={limit}"),
         ),
-        WorkerCommand::History { wid, limit } => {
-            client.get(&"common", &"v1", "workers/{wid}/history?limit={limit}")
-        }
+        WorkerCommand::History { wid, limit } => client.get(
+            &"common",
+            &"v1",
+            &format!("workers/{wid}/history?limit={limit}"),
+        ),
     };
 
     match result {
